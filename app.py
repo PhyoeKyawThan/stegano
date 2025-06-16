@@ -6,8 +6,8 @@ import io
 from os import path
 
 app = Flask(__name__)
-app.config['O_IMAGE_DIR'] = 'static/o_images'
-app.config['e_IMAGE_DIR'] = 'static/encoded_images'
+app.config['O_IMAGE_DIR'] = 'stegano/static/o_images'
+app.config['e_IMAGE_DIR'] = 'stegano/static/encoded_images'
 
 @app.route('/')
 def index():
@@ -22,16 +22,18 @@ def encode_message():
     if request.method == 'POST':
         image = request.files['o-image']
         message = request.form['message']
-        filename = generate_time_based_name('original') + secure_filename(image.filename)
+        filename = generate_time_based_name('original_') + secure_filename(image.filename)
         if(image and message):
-            image.save(path.join(app.config['O_IMAGE_DIR'], filename))
-            encoded_image = path.join(app.config['e_IMAGE_DIR'],generate_time_based_name("encoded_") + '.png')
+            original_file = path.join(app.config['O_IMAGE_DIR'], filename)
+            image.save(original_file)
+            encoded_file = generate_time_based_name("encoded_") + '.png'
+            encoded_image = path.join(app.config['e_IMAGE_DIR'], encoded_file)
             hide_message(
-                path.join(app.config['O_IMAGE_DIR'], filename),
+                original_file,
                 message,
                 encoded_image)
         return send_file(
-        encoded_image,
+        f'static/encoded_images/{encoded_file}',
         as_attachment=True,
         download_name=generate_time_based_name('encoded_') + '.png',
         mimetype='image/png'
@@ -43,5 +45,5 @@ def decode_message():
     if request.method == 'POST':
         image = request.files['encoded-image']
         if image.filename:
-            return render_template('index.html', decoded_message = extract_message(image))
-        return render_template('index.html', err = 'Please select an image first.')
+            return render_template('decode.html', decoded_message = extract_message(image))
+        return render_template('decode.html', err = 'Please select an image first.')
