@@ -1,0 +1,4 @@
+/static/encoded_images/*.png
+/static/o_images/*
+venv/
+__pycache__/

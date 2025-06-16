@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSB - Steganography</title>
+    <style>
+        * {
+            color: brown;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+        }
+
+        form {
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 40px;
+            border: 1px solid brown;
+            border-radius: 10px;
+            margin: auto;
+        }
+
+        form input,
+        textarea {
+            padding: 10px 20px;
+            border: 1px solid brown;
+            border-radius: 8px;
+        }
+
+        form button {
+            padding: 5px 10px;
+            border: none;
+            background-color: brown;
+            color: white;
+            font-weight: bold;
+            margin: 10px auto;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 480px){
+            form{
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/decode-msg" method="post" enctype="multipart/form-data">
+        <a href="/">Encode / Home</a>
+        <h2>Decoding Message</h2>
+        <div>
+            {% if decoded_message %}
+            <p><b>Your decoded Message: </b>{{ decoded_message }}</p>
+            {% endif %}
+        </div>
+        <label for="e-image">Select an image which had contains message: </label>
+        <input type="file" name="encoded-image" id="e-image" required>
+        <button type="submit">Decode</button>
+    </form>
+</body>
+
+</html>
